@@ -1,0 +1,16 @@
+/*html {
+	font-size: 40px;
+}*/
+
+.slidev-layout {
+	@apply px-[12rem] pt-[6rem] pb-[8rem];
+}
+
+.slidev-code, pre {
+	@apply text-lg !important;
+}
+
+:not(pre) > code::before, :not(pre) > code::after {
+	content: '';
+	opacity: inherit;
+}

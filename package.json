@@ -1,0 +1,17 @@
+{
+	"private": true,
+	"scripts": {
+		"build": "slidev build",
+		"dev": "slidev --open",
+		"export": "slidev export"
+	},
+	"dependencies": {
+		"@slidev/cli": "^0.28.2",
+		"@slidev/theme-default": "*",
+		"@slidev/theme-seriph": "*"
+	},
+	"name": "magmide-talk",
+	"devDependencies": {
+		"slidev-theme-takahashi": "^1.0.0"
+	}
+}
