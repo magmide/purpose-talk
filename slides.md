@@ -1,33 +1,33 @@
 ---
 theme: seriph
-# random image from a curated Unsplash collection by Anthony
-# like them? see https://unsplash.com/collections/94734566/slidev
-# background: https://images.unsplash.com/photo-1620837953336-8274c0623a3c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3870&q=80
-# apply any windi css classes to the current slide
-class: 'text-left'
-# https://sli.dev/custom/highlighters.html
+background: >-
+  https://images.unsplash.com/photo-1620837953336-8274c0623a3c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3870&q=80
+class: text-left
 highlighter: prism
-# show line numbers in code blocks
 lineNumbers: false
-
-# persist drawings in exports and build
 drawings:
   persist: false
 ---
 
-<h1 class="text-2xl">Software can literally be perfect</h1>
+<h1 class="text-left text-2xl">Software can literally be perfect</h1>
 
-<h2 class="text-xl">Dependent Types</h2>
-<h2 class="text-xl">Separation Logic</h2>
-<h2 class="text-xl">Iris</h2>
-<h2 class="text-xl">Magmide</h2>
-<h2 class="text-xl">and the path to provably correct code</h2>
+<h2 class="text-left text-xl">Dependent Types</h2>
+<h2 class="text-left text-xl">Separation Logic</h2>
+<h2 class="text-left text-xl">Iris</h2>
+<h2 class="text-left text-xl">Magmide</h2>
+<h2 class="text-left text-xl">and the path to provably correct code</h2>
 
 <style>
 .slidev-layout {
   @apply px-[4rem] py-[2rem];
 }
 </style>
+
+<!--
+formal verification, what it is
+what big ideas are
+practical and mainstream
+-->
 
 ---
 
@@ -38,20 +38,36 @@ drawings:
 - operational failures
 - safety critical failures
 
+[The Cost of Poor Software Quality in the US: A 2020 Report](https://www.it-cisq.org/pdf/CPSQ-2020-report.pdf)
+
+- $1.56 trillion in operational failures
+- $1.31 trillion in technical debt
+
+[The Hidden Costs of Cybercrime](https://www.mcafee.com/enterprise/en-us/assets/reports/rp-hidden-costs-of-cybercrime.pdf)
+
+- $945 billion monetary loss from cybercrime
+- $145 billion global spending on cybersecurity
+
 Broken software hurts people, and slows down human progress.
 
-<!--
-honestly I'm not going to spend much time trying to convince you this is true.
-you already know its true just because you live in our society
-you deal with broken software all the time
+<style>
+.slidev-layout {
+  @apply px-[10rem] py-[2rem];
+}
+</style>
 
-https://www.it-cisq.org/pdf/CPSQ-2020-report.pdf
+<!--
+obvious software is broken
+it's a problem
+all of us deal with it every day
+
 Consortium for Information & Software Quality | The Cost of Poor Software Quality in the US: A 2020 Report
 $1.56 trillion costs for operational failures, just for the US in 2020
 $1.31 trillion *separately* for technical debt in critical software
 
-https://findstack.com/hacking-statistics/
-Cybercrime costs the world economy more than $1 trillion per year (McAfee)
+McAfee | Hidden Costs of Cybercrime
+https://www.mcafee.com/enterprise/en-us/assets/reports/rp-hidden-costs-of-cybercrime.pdf
+up from $522.5 billion in 2018
 -->
 
 ---
@@ -78,11 +94,12 @@ I challenge you to use any of the tools they built!
 </style>
 
 <!--
-this article talks about a DARPA funded team that was able to create control software for a quadcopter, that couldn't be hacked into, even by the best hackers in the world, people who can usually commandeer jeeps and make atms pay them arbitrary amounts of money.
-the team did this by *proving*, with the same level of certainty as you would prove that 1 + 1 = 2, that the control software was impossible to remotely hijack.
+DARPA funded team
+unhackable quadcopter control software
+even after world class hacking team given access
+formal verification, proofs
 however the team that did that were all phds
-not all of us have the time to wade through academic jargon and use the punishingly obtuse tools academics build
-at least for non-professors
+we don't all have time for obtuse academic papers
 -->
 
 ---
@@ -94,10 +111,10 @@ The core concepts of formal verification aren't very complicated.
 - Separation Logic
 
 <!--
-this talk intends to discuss the basic concepts that make provably correct code possible
-and talk about Magmide, a language intended to make formal verification practical for practicing software engineers
-The first idea is dependent types
-before understanding what they are, let's understand why we might want them
+introduce core concepts
+Iris
+Magmide
+first dependent types
 -->
 
 ---
@@ -117,8 +134,10 @@ fn is_one(n: u64) -> bool {
 </v-click>
 
 <!--
-this rust function returns a boolean indicating whether some unsigned number is 1
-the *type* of this function is `(u64) -> bool`, which tells us nothing about the meaning of this function. we don't know what the returned bool *means* just that we get a bool
+to understand dependent types, first let's look at a problem
+is_one
+type of this function
+no nothing about meaning of bool
 -->
 
 ---
@@ -139,8 +158,10 @@ fn always_false(_: u64) -> bool {
 ```
 
 <!--
-But notice that the *type* `(u64) -> bool` can apply to *many* different functions, all of which do different things:
-what if we wanted a way to be *certain* that our function did what it said? we could test it, but then we would only be able to be certain about all the inputs we could actually come up with and feed into the function. what if we wanted the *type* of the function to guarantee its behavior?
+same type, different behaviors
+can we be certain?
+testing can't do it, at least not for infinite inputs
+can the type of the function?
 this is where dependent types come in
 a dependent type system is one that allows *types* to reference, or *depend* on *values*
 -->
@@ -173,11 +194,12 @@ Solve All Obligations with (simpl; lia).
 </style>
 
 <!--
-Here's a function in the dependently typed proof language Coq. It's quite a mouthful, but it does the thing we want.
-The type of this function is: `forall (n: nat), {b: bool | b = true <-> n = 1}`, which is read as "forall n which is a nat (natural number), return a b which is a bool such that b is true if and only if n = 1"
-It would be nice if that type wasn't so long, but it works! Using Coq and the the `lia` tactic (which can automatically solve lots of simple math problems, it stands for "linear arithmetic"), we can write a function that is *provably correct*.
-Of course guaranteeing a function always correctly says if a number is 1 is pretty lame, but you can do much more powerful things using a proof language like Coq.
-there are quite a few more important concepts that make coq and languages like it powerful, but dependent types are the main idea at the heart of them all.
+coq
+this function does what we want
+here's how to read function type
+it's long, but it works!
+this is lame, but can be more powerful
+more ideas, dependent types are the core one
 -->
 
 ---
@@ -203,9 +225,10 @@ Yes! A proof of `u64`!
 </v-clicks>
 
 <!--
-these kinds of dependently typed proof languages are extremely powerful. it's a programming language that is literally nothing more than *type theory*, a system of logic powerful enough to define all of mathematics
-
-in a system like this you can state basically arbitrary propositions of logic as *programs*. essentially, a type can be the same as a *proposition*, and a piece of data that successfully checks as that type is a *proof* of that proposition.
+dependent types enable *proof objects*
+proof languages are *literally* just type theory
+proofs and programs are the same thing
+propositions are types, proofs are typed data
 -->
 
 ---
@@ -220,6 +243,15 @@ Inductive Even: nat -> Prop :=
 <v-click>
 
 ```v
+Definition even_4_manual: Even 4 :=
+  (Even_plus_2 2 (Even_plus_2 0 Even_0)).
+```
+
+</v-click>
+
+<v-click>
+
+```v
 Theorem even_4: Even 4.
 Proof.
   repeat constructor.
@@ -228,19 +260,11 @@ Qed.
 
 </v-click>
 
-<v-click>
-
-```v
-Definition even_4_manual: Even 4 :=
-  (Even_plus_2 2 (Even_plus_2 0 Even_0)).
-```
-
-</v-click>
-
 <!--
-I'm not going to go over all the details, I'm just trying to let you know all of this is possible. go learn more if you want
-for a small taste, here's a *type* that can be used to build a proof object, or "evidence", that some number is even
-we can prove things about even numbers, from simply asserting that some particular number is even
+more interesting Even type
+skipping details, you can go learn more
+Even defines constructors to build evidence
+we can proove a particular number is even
 -->
 
 ---
@@ -259,7 +283,28 @@ Qed.
 ```
 
 <!--
-to the fact that if you double any number the result will be even
+if you double any number result is even
+even_double is just a function
+it transforms values of a type
+-->
+
+---
+
+```v
+Definition even_double_manual :=
+  fun n: nat => nat_ind
+  (fun n0: nat => Even (double n0)) Even_0
+  (fun (n0: nat) (IHn: Even (double n0)) =>
+   Even_plus_2
+     ((fix double (n1: nat): nat :=
+        match n1 with
+        | 0 => 0
+        | S sub_n => S (S (double sub_n))
+        end) n0) IHn) n.
+```
+
+<!--
+here's the raw function
 -->
 
 ---
@@ -270,7 +315,7 @@ If you want to learn more:
 - [Certified Programming with Dependent Types](http://adam.chlipala.net/cpdt/)
 
 <!--
-this is an extremely deep topic, so if you want to learn more go check out these resources
+very deep topic
 -->
 
 ---
@@ -289,8 +334,9 @@ Why isn't everyone doing this?
 </v-click>
 
 <!--
-it should be obvious this is extremely powerful. we can see teams doing lots of amazing things with proof assistants
-so if this is so powerful, why isn't is commonplace? why isn't everyone doing this? there are two big reasons
+very powerful
+why aren't these tools widely used?
+two big reasons
 -->
 
 ---
@@ -327,7 +373,10 @@ Academia has bad incentives to properly explain and expose their work.
 </style>
 
 <!--
-all this cool work is hopeless mired in *research debt*. basically academia has really bad incentives about actually making research understandable and discoverable by everyone else. they have a really weird specific culture that values jargon and being as terse as possible instead of making things as easy to learn as possible. I honestly think the culture of academia is actually kind of toxic, it seems like they're almost willfully unconcerned with letting anyone who isn't already in the club understand what they're doing.
+read quotes
+culture of academia
+jargon terseness
+toxic, feels intentionally exclusive
 -->
 
 ---
@@ -349,11 +398,11 @@ Von Neumann computation is *defined* as effectful mutation of state.
 </v-click>
 
 <!--
-they're also way too dogmatic about the *pure functional paradigm*. there are so many really useful ideas that started in academia and then sat mostly ignored for a long time in pure functional languages before finally being put into imperative languages and finding mainstream adoption.
-the concept of metaprogramming is extremely powerful, and it was a curiosity in lisp and scheme and such things before Rust brought it into standard practice.
-discriminated union types and the match block are extremely poweful, but that idea was a curiosity of ml and haskell until, again, Rust made everyone see how powerful it was.
-all these proof languages are pure functional languages. I'll actually talk later about why the pure functional paradigm is perfectly suited to *proof* languages.
-but we need a rigorous logical system for reasoning about real computational state, which is mutable and finite.
+metaprogramming not used when in lisp and scheme, very widely used in Rust
+discriminated union types not used when in ml and haskell, very widely used in Rust
+proof languages are pure functional
+that makes sense for mathematical proofs, but clearly it isn't sufficient
+need system for mutable state
 -->
 
 ---
@@ -361,6 +410,11 @@ but we need a rigorous logical system for reasoning about real computational sta
 # Separation Logic
 
 Logical framework for reasoning about mutable state.
+
+<!--
+separation logic was invented for this purpose
+but first we have to understand the normal logical systems it's responding to
+-->
 
 ---
 
@@ -389,12 +443,10 @@ equivalent to:
 </v-click>
 
 <!--
-separation logic is a logical framework for making rigorous assertions about mutable state. it's a perfect fit for reasoning about *real* computation, since a computer is just a big chunk of mutable state. in fact, Rust's ownership system was directly inspired by separation logic.
-the core idea of separation logic is the *separating conjunction*, but in order to understand it we'll have to talk about the *normal* conjunction.
 conjunction is the academic name for the logical "and" operation.
-if we have two logical assertions P and Q, then if we want to assert that *both* of them are true we will try to prove their *conjunction*
-conjunction works great for *pure* propositions, ones that are inherently *duplicable*, since we can do things like this:
-we can freely copy the P, and the two logical statements are perfectly equivalent
+conjunction
+*pure* propositions, duplicable
+freely duplicate P
 -->
 
 ---
@@ -406,7 +458,7 @@ equivalent to:
 ```
 
 <!--
-if our assertions are pure facts, maybe P = Even(4) and Q = 1 + 1 == 2, then this works great
+pure logical facts
 -->
 
 ---
@@ -425,8 +477,10 @@ mem[a] == 1
 </v-click>
 
 <!--
-but what if our assertion is talking about some *resource*, an assertion about something that could *change* or be destroyed, such as an assertion about a memory location, mem[a] == 1
-this can still work, but it could be really easy to accidentally assert something false, such as (mem[a] == 1) ∧ (mem[a] == 2)
+but for resources? can change or be destroyed?
+Rust's ownership system was directly inspired by separation logic.
+easy to create inconsistent situations
+rules don't stop you early enough
 -->
 
 ---
@@ -448,10 +502,18 @@ this can still work, but it could be really easy to accidentally assert somethin
 </v-click>
 
 <!--
-so separation logic was invented. instead of a normal conjunction operator that allows you to duplicate assertion, it has the *separating* conjunction (written with a star, `*`, pronounced "and separately"), which basically requires that different assertions aren't allowed to talk about the same pieces of state.
-for example, it's not allowed for the separating conjunction to be used on assertions that talk about the same piece of memory, even if the assertions are consistent with each other
-the assertions have to be *disjoint*, or separate (which is why it's called separation logic)
-this means that you can never duplicate an assertion about the same spot in memory, in order to pass a function an assertion you either have to make a fresh copy of the data in a new place or *give the assertion away*. this is why an assertion in separation logic nicely encodes *ownership* of finite resources, resources that can be created, mutated, and destroyed. there are a few more concepts in separation logic, such as the separating implication and the frame rule, but the separating conjunction is the main idea.
+back to separation logic
+*separating* conjunction
+use star, pronounced "and separately"
+must be disjoint
+even when consistent
+assertions are *disjoint*, or separate
+can't duplicate
+have to give away knowledge, or ownership
+other ideas, separating implication, frame rule
+
+but what about multiple read only?
+what about concurrency or atomics?
 -->
 
 ---
@@ -472,9 +534,11 @@ Built to verify arbitrarily complex Rust programs.
 </v-clicks>
 
 <!--
-but of course, separation logic is just a handful of ideas, and the simple description I've given you is way too strict to really be useful. what if I want to give a read-only reference to someone without losing my own knowledge of it? what if I'm using atomic updates and so I can have multiple threads make writes at the same time?
-the basic ideas of separation logic are just the beginning, and people have been making more specific, and complex, versions of it for about twenty years.
-recently, a team of academics created the Iris separation logic, which is powerful enough that they were able to verify the correctness of the Rust type system, *and even to verify the correctness of code that uses `unsafe`*! it's a framework so powerful that it can verify even insanely complicated things
+basic ideas are just the beginning
+more complex versions for about 20 years
+Iris
+used to verify soundness of Rust type system
+*and even to verify the correctness of code that uses `unsafe`*!
 -->
 
 ---
@@ -485,14 +549,18 @@ Why isn't everyone using Iris?
 - No directly usable tool.
 
 <!--
-but again, *research debt* rears its head. Iris is extremely powerful, and although the core concepts that would allow a practicing engineer to use it aren't that complicated, actually understanding the tool is incredibly challenging. it's mired in academic jargon and difficult to parse notation.
-the most troubling thing is that Iris is only being used to write papers, only being used in theoretical models and academic work, and hasn't been built into a tool that practicing engineers would ever actually use to create shippable software.
-all the proofs that these academic teams are doing on code aren't being done on *directly* on the real source code, but a Coq-notation translated version of it (TODO side by side example). these proofs are being done "on the side".
+core ideas are learnable
+mired in academic jargon, obtuse notation
+only used in academic work
+only "on the side proofs"
+(TODO side by side example)
 -->
 
 ---
 
-Can formal verification be practical?
+# Magmide
+
+Design constraints:
 
 <v-clicks>
 
@@ -504,6 +572,17 @@ Can formal verification be practical?
 - Taught effectively (respect user's time)
 
 </v-clicks>
+
+<!--
+Can formal verification be practical?
+core ideas
+Rust succeeded by making big promises, give full logical power
+a logical system can formalize any environment, we might as well
+trackable effects use an idea from Iris/Iron, trackable invariants
+languages can create reusable safety guarantees for sub-languages, reexpose proof language, combine upward
+rust and cargo are great
+prioritize distillation research, no obtuse notations, no jargon, no non-ascii characters, examples before formal definitions
+-->
 
 ---
 
@@ -529,6 +608,13 @@ Logic Magmide              +-------------> Host Magmide
 
 <v-click>
 
+- C -> Rust
+- Coq/LLVM -> Magmide
+
+</v-click>
+
+<v-click>
+
 http://github.com/magmide/magmide
 
 </v-click>
@@ -546,10 +632,19 @@ Thank you!
 </style>
 
 <!--
-I think all of this is unacceptable. I've skipped a lot of details, but even in this short talk I've explained the big ideas that can make provably correct code possible. I don't think we should tolerate these ideas being trapped in the ivory tower anymore, and I'm not willing to wait around for an academic to decide they want to build a practical and usable tool. software has been broken for too long, and it's causing immense harm every day. it's time to build something that can clear away all this research debt and make formal verification practical for everyone.
-this is why I've been working on the Magmide project. the idea of Magmide is to create a tool that brings together a dependently typed pure functional proof language (Logic Magmide) and a practical bare metal computational language (Host Magmide) that places the full power of Iris at its core. the goal is for Magmide to be to both Coq and LLVM what Rust has been to C.
-the combination of both a full dependently typed proof language and a bare metal host language would allow us to build verified software for *any* computational environment, from deeply embedded systems all the way up to hosted environments like that provided by the webassembly runtime
-if you want to understand more about the Magmide design and the goals of the project, head over to the repo.
-right now Magmide is extremely early, and I only have some exploratory proofs, a lot of design writing, and a Coq plugin I intend to use while the project is being bootstrapped. your feedback and help are welcome!
-thank you for your time! I hope I've inspired you about the possibility of provably correct code, and that you'll come help me build Magmide!
+the current state of affairs is unacceptable
+I've shared core ideas in this short talk, not impossible to learn
+get formal verification out of the ivory tower
+software has been broken for too long
+should be practical and reusable for software practitioners
+
+Magmide will combine pure proof language with practical computational language, with Iris
+could verify software for any environment
+deeply embedded systems
+webassembly runtime
+
+repo
+very early, only exploratory proofs, design writing, Coq plugin for bootstrapping
+feedback and support welcome!
+hope you're inspired!
 -->
