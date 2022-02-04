@@ -27,6 +27,9 @@ drawings:
 formal verification, what it is
 what big ideas are
 practical and mainstream
+
+this talk is intended for people who already understand type systems, and understanding the Rust type system is really helpful
+you don't have to be good at Rust, but understanding how its type system works will make this talk way easier to understand
 -->
 
 ---
@@ -104,10 +107,23 @@ we don't all have time for obtuse academic papers
 
 ---
 
-The core concepts of formal verification aren't very complicated.
+# Magmide
+
+- Bring formal verification to practicing engineers.
+- Proof language as a verified bare metal program.
+- Foundation for verified programs for any architecture or environment.
+
+<!--
+formal verification needs to be brought out of the ivory tower
+but in order to believe the goals of Magmide are possible, and to realize why the design of Magmide is exciting, it's useful to understand the core concepts behind formal verification
+-->
+
+---
+
+The core concepts of formal verification:
 
 - Dependent Types
-- Proof Objects
+- Type Checking is Proof Checking
 - Separation Logic
 
 <!--
@@ -118,8 +134,6 @@ first dependent types
 -->
 
 ---
-
-# Dependent Types
 
 ```rust
 fn is_one(n: u64) -> bool {
@@ -137,7 +151,7 @@ fn is_one(n: u64) -> bool {
 to understand dependent types, first let's look at a problem
 is_one
 type of this function
-no nothing about meaning of bool
+know nothing about meaning of bool
 -->
 
 ---
@@ -168,6 +182,7 @@ a dependent type system is one that allows *types* to reference, or *depend* on 
 
 ---
 
+# Dependent Types
 
 ```v
 Require Import Coq.Program.Tactics Coq.micromega.Lia.
@@ -176,8 +191,7 @@ Program Definition is_one n: {b | b = true <-> n = 1} :=
   match n with
   | 1 => true
   | _ => false
-  end
-.
+  end.
 Solve All Obligations with (simpl; lia).
 ```
 
@@ -195,6 +209,7 @@ Solve All Obligations with (simpl; lia).
 
 <!--
 coq
+I'm intentionally not worried if you understand this function, I just want you to realize it's possible
 this function does what we want
 here's how to read function type
 it's long, but it works!
@@ -204,40 +219,104 @@ more ideas, dependent types are the core one
 
 ---
 
-# Proof Objects
-
-Is `0` a proof?
+# Programs == Proofs
 
 <v-click>
 
-Yes! A proof of `u64`!
+Is `0` a proof?
 
 </v-click>
 
-<v-clicks>
+<v-click>
 
-- `0` proves `u64`
-- `true` proves `bool`
-- `is_zero` proves `u64 -> bool`
-- `(0, true)` proves `(u64, bool)`
-- `0` or `false` proves `u64 | bool`
+More specifically, is `0u64` a proof?
 
-</v-clicks>
+</v-click>
+
+<v-click>
+
+Yes, a proof of `u64`!
+
+</v-click>
+
+So is 1, 42, 250, etc
+
+<v-click>
+
+Curry-Howard Correspondence
+
+</v-click>
 
 <!--
-dependent types enable *proof objects*
-proof languages are *literally* just type theory
-proofs and programs are the same thing
-propositions are types, proofs are typed data
+programs and proofs are the same thing
+
+is 0 a proof? 0 isn't a very interesting program, but it's a program
+yes, 0 is a proof! more specifically in Rust, the literal 0u64 is a *proof* of of u64
+all I'm doing is using different words for things we already understand
+if we change our perspective so that a *type* is the same as a *proposition*, a logical assertion that can possibly be proven
+then any piece of *data* that typechecks as some type is a *proof* of the proposition represented by that type
+
+this is a bit mind-bending, but it's true for any programming language!
+not all programming languages can prove very interesting things, but they can all prove things
 -->
 
 ---
 
+# Programs == Proofs
+
+<v-clicks>
+
+- `0u64` proves `u64`
+- `true` or `false` prove `bool`
+- `0u64` or `true` or `false` proves `u64 | bool`
+- `(0u64, true)` proves `(u64, bool)`
+
+</v-clicks>
+
+<!--
+different patterns of types can prove different kinds of propositions
+-->
+
+---
+
+# Programs == Proofs
+
+```v
+Inductive Bit :=
+  | bit0
+  | bit1.
+
+Inductive Byte :=
+  | byte (b7 b6 b5 b4 b3 b2 b1 b0: Bit).
+
+Definition binary_zero: Byte :=
+  (byte bit0 bit0 bit0 bit0 bit0 bit0 bit0 bit0).
+```
+
+<v-click>
+
+- `binary_zero` is a *value* of `Byte`
+- `binary_zero` is a *proof* of `Byte`
+
+</v-click>
+
+<!--
+here's how we'd actually declare the type of a byte in Coq
+first we have to define the concept of a bit
+and then a byte is just a tuple of bits!
+there's only one way to "prove" byte, by "proving" eight bits
+but there are two ways to "prove" a bit, either with the zero version or the one version
+we can think of pieces of data as "evidence" of some proposition
+-->
+
+---
+
+# Programs == Proofs
+
 ```v
 Inductive Even: nat -> Prop :=
   | Even_0: Even 0
-  | Even_plus_2: forall n, Even n -> Even (S (S n))
-.
+  | Even_plus_2: forall n, Even n -> Even (S (S n)).
 ```
 
 <v-click>
@@ -261,10 +340,72 @@ Qed.
 </v-click>
 
 <!--
-more interesting Even type
-skipping details, you can go learn more
-Even defines constructors to build evidence
-we can proove a particular number is even
+because of dependent types, it's possible to create a language where *type* checking is the same as *proof* checking
+
+
+dependent types are what makes this programs equals proofs concept actually powerful though
+here's a more interesting Even type
+Even is kind of like bit, in that it has two constructors, or two ways to construct "data" or a "proof" of Even
+the first one, Even_0, can only prove that 0 is even
+but the second one Even_plus_2, is a *function* that if you pass it a proof that some number n is Even, it will give you back a proof that the number plus two is even
+(S (S n)) is the weird coq way of writing plus 2, it's basically incrementing twice, don't worry about it
+I'm skipping lots of details, you can go learn more
+
+using our even constructors, we can construct a piece of evidence whose *type* is that 4 is even
+at the bottom is a proof that 0 is even, and then we call the plus two constructor twice on top of that
+
+most of the time manually writing out the actual proof object is tedious, so we can use these interactive tactics
+they're basically just metaprograms that construct values of different types
+-->
+
+---
+
+# Programs == Proofs
+
+<v-click>
+
+```rust
+fn is_one(n: u64) -> bool {
+  n == 1
+}
+```
+
+- `is_one` is a *value* of `u64 -> bool`
+
+</v-click>
+
+<v-click>
+
+| P | Q | P -> Q |
+|---|---|--------|
+| T | T | T      |
+| T | F | F      |
+| F | T | T      |
+| F | F | T      |
+
+- `is_one` is a *proof* of `u64 -> bool`
+
+</v-click>
+
+<!-- <v-click>
+
+```rust
+fn always_true(_: u64) -> bool {
+  n == 1
+}
+```
+
+</v-click> -->
+
+
+<!--
+where this really gets powerful, is *functions* that can transform evidence into different pieces of evidence
+remember our simple rust function is_one
+the type of this function is u64 -> bool
+in programming languages we read that type as the function type, basically an indication that we can take a value of some type and transform it into a value of another type
+using the types as propositions concept again though, we can just use different words and treat the arrow as *logical implication*
+
+again though, u64 -> bool isn't a very interesting type, lots of functions that do different things have that same type
 -->
 
 ---
@@ -275,17 +416,25 @@ Fixpoint double (n:nat) :=
   | O => O
   | S sub_n => S (S (double sub_n))
   end.
+```
 
+<v-click>
+
+```v
 Theorem even_double: forall n, Even (double n).
 Proof.
   induction n; constructor; assumption.
 Qed.
 ```
 
+</v-click>
+
 <!--
+with dependent types, especially more interesting ones like Even
+a *function* can be a *logical theorem* that proves something
 if you double any number result is even
 even_double is just a function
-it transforms values of a type
+it transforms values of a the type natural number into a proof that that doubling that specific natural number is even
 -->
 
 ---
@@ -515,6 +664,22 @@ other ideas, separating implication, frame rule
 but what about multiple read only?
 what about concurrency or atomics?
 -->
+
+---
+
+# Rust
+
+Rust borrow checker a proof checker for a *subset* of separation logic.
+
+(All type checkers are proof checkers, just for very simple logical systems.)
+
+Need `unsafe` for it to
+
+<!--
+like I mentioned, the rust ownership and lifetime system, which is checked by the borrow checker, is directly inspired by separation logic
+separation logic
+-->
+
 
 ---
 
