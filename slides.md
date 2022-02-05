@@ -1,25 +1,22 @@
 ---
-theme: seriph
-background: >-
-  https://images.unsplash.com/photo-1620837953336-8274c0623a3c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3870&q=80
-class: text-left
+theme: apple-basic
+class: text-center
 highlighter: prism
 lineNumbers: false
 drawings:
   persist: false
 ---
 
-<h1 class="text-left text-2xl">Software can literally be perfect</h1>
+<h1>Software can literally<br>be perfect</h1>
 
-<h2 class="text-left text-xl">Dependent Types</h2>
-<h2 class="text-left text-xl">Separation Logic</h2>
-<h2 class="text-left text-xl">Iris</h2>
-<h2 class="text-left text-xl">Magmide</h2>
-<h2 class="text-left text-xl">and the path to provably correct code</h2>
+<h2>How Formal Verification and Magmide<br>could make provably correct code<br>attainable for practicing software engineers.</h2>
 
 <style>
 .slidev-layout {
-  @apply px-[4rem] py-[2rem];
+  @apply px-[4rem] py-[8rem];
+}
+.slidev-layout h1 {
+  @apply text-5xl mb-[4rem];
 }
 </style>
 
@@ -34,7 +31,7 @@ you don't have to be good at Rust, but understanding how its type system works w
 
 ---
 
-**Software is broken.**
+# Software is broken
 
 - security breaches
 - ransomware attacks
@@ -55,7 +52,7 @@ Broken software hurts people, and slows down human progress.
 
 <style>
 .slidev-layout {
-  @apply px-[10rem] py-[2rem];
+  @apply px-[10rem] py-[2rem] text-lg;
 }
 </style>
 
@@ -75,24 +72,17 @@ up from $522.5 billion in 2018
 
 ---
 
-
-It doesn't have to be this way!
+# It doesn't have to be this way!
 
 Provably correct code is possible with formal verification.
 
-[Hacker-Proof Code Confirmed](https://www.quantamagazine.org/formal-verification-creates-hacker-proof-code-20160920/)
+[Quanta Magazine: Hacker-Proof Code Confirmed](https://www.quantamagazine.org/formal-verification-creates-hacker-proof-code-20160920/)
 
 <img class="h-[30vh]" src="https://d2r55xnwy6nx47.cloudfront.net/uploads/2016/09/ProgramVerification_BoyaSun_2K.jpg" />
 
-<v-click>
-
-I challenge you to use any of the tools they built!
-
-</v-click>
-
 <style>
 .slidev-layout {
-  @apply px-[6rem] py-[4rem];
+  @apply px-[12rem] py-[4rem];
 }
 </style>
 
@@ -120,7 +110,7 @@ but in order to believe the goals of Magmide are possible, and to realize why th
 
 ---
 
-The core concepts of formal verification:
+# Core concepts of formal verification
 
 - Dependent Types
 - Type Checking is Proof Checking
@@ -128,8 +118,6 @@ The core concepts of formal verification:
 
 <!--
 introduce core concepts
-Iris
-Magmide
 first dependent types
 -->
 
@@ -146,6 +134,12 @@ fn is_one(n: u64) -> bool {
 `(u64) -> bool`
 
 </v-click>
+
+<style>
+.slidev-layout {
+  @apply text-3xl;
+}
+</style>
 
 <!--
 to understand dependent types, first let's look at a problem
@@ -185,8 +179,6 @@ a dependent type system is one that allows *types* to reference, or *depend* on 
 # Dependent Types
 
 ```v
-Require Import Coq.Program.Tactics Coq.micromega.Lia.
-
 Program Definition is_one n: {b | b = true <-> n = 1} :=
   match n with
   | 1 => true
@@ -201,117 +193,43 @@ Solve All Obligations with (simpl; lia).
 
 </v-click>
 
-<style>
-.slidev-code {
-  @apply text-base !important;
-}
-</style>
-
 <!--
 coq
-I'm intentionally not worried if you understand this function, I just want you to realize it's possible
+this isn't a coq lesson, so you don't have to deeply understand this function, I just want you to realize it's possible
 this function does what we want
 here's how to read function type
 it's long, but it works!
-this is lame, but can be more powerful
-more ideas, dependent types are the core one
 -->
 
 ---
 
-# Programs == Proofs
+# Type Checking is Proof Checking
 
-<v-click>
-
-Is `0` a proof?
-
-</v-click>
-
-<v-click>
-
-More specifically, is `0u64` a proof?
-
-</v-click>
-
-<v-click>
-
-Yes, a proof of `u64`!
-
-</v-click>
-
-So is 1, 42, 250, etc
-
-<v-click>
-
-Curry-Howard Correspondence
-
-</v-click>
-
-<!--
-programs and proofs are the same thing
-
-is 0 a proof? 0 isn't a very interesting program, but it's a program
-yes, 0 is a proof! more specifically in Rust, the literal 0u64 is a *proof* of of u64
-all I'm doing is using different words for things we already understand
-if we change our perspective so that a *type* is the same as a *proposition*, a logical assertion that can possibly be proven
-then any piece of *data* that typechecks as some type is a *proof* of the proposition represented by that type
-
-this is a bit mind-bending, but it's true for any programming language!
-not all programming languages can prove very interesting things, but they can all prove things
--->
-
----
-
-# Programs == Proofs
-
-<v-clicks>
-
-- `0u64` proves `u64`
-- `true` or `false` prove `bool`
-- `0u64` or `true` or `false` proves `u64 | bool`
-- `(0u64, true)` proves `(u64, bool)`
-
-</v-clicks>
-
-<!--
-different patterns of types can prove different kinds of propositions
--->
-
----
-
-# Programs == Proofs
-
-```v
-Inductive Bit :=
-  | bit0
-  | bit1.
-
-Inductive Byte :=
-  | byte (b7 b6 b5 b4 b3 b2 b1 b0: Bit).
-
-Definition binary_zero: Byte :=
-  (byte bit0 bit0 bit0 bit0 bit0 bit0 bit0 bit0).
+```v {3,7}
+Program Definition is_one n: {b | b = true <-> n = 1} :=
+  match n with
+  | 0 => true // <- mistake!
+  | _ => false
+  end.
+Solve All Obligations with (simpl; lia).
+// ❌ unable to unify!
 ```
 
 <v-click>
 
-- `binary_zero` is a *value* of `Byte`
-- `binary_zero` is a *proof* of `Byte`
+The *type system* checks that everything is consistent.
 
 </v-click>
 
 <!--
-here's how we'd actually declare the type of a byte in Coq
-first we have to define the concept of a bit
-and then a byte is just a tuple of bits!
-there's only one way to "prove" byte, by "proving" eight bits
-but there are two ways to "prove" a bit, either with the zero version or the one version
-we can think of pieces of data as "evidence" of some proposition
+a type system that has dependent types basically makes *type* checking the exact same thing as *proof* checking
+to check whether some proof is actually consistent, we just run our type checking algorithm
+the cool thing is that this is actually true for *any* type checking algorithm. all type systems, such as Rust's type system, are just "logical" systems, and when you write code and assert that code has a certain type, the type checking algorithm is basically checking if your "proof" is correct
+simpler type systems are basically equivalent to simpler logical systems, so they can't make claims and proofs about very interesting logical ideas
+this is lame, but can be more powerful
 -->
 
 ---
-
-# Programs == Proofs
 
 ```v
 Inductive Even: nat -> Prop :=
@@ -322,16 +240,7 @@ Inductive Even: nat -> Prop :=
 <v-click>
 
 ```v
-Definition even_4_manual: Even 4 :=
-  (Even_plus_2 2 (Even_plus_2 0 Even_0)).
-```
-
-</v-click>
-
-<v-click>
-
-```v
-Theorem even_4: Even 4.
+Definition four_is_even: Even 4.
 Proof.
   repeat constructor.
 Qed.
@@ -340,78 +249,18 @@ Qed.
 </v-click>
 
 <!--
-because of dependent types, it's possible to create a language where *type* checking is the same as *proof* checking
-
-
-dependent types are what makes this programs equals proofs concept actually powerful though
-here's a more interesting Even type
-Even is kind of like bit, in that it has two constructors, or two ways to construct "data" or a "proof" of Even
-the first one, Even_0, can only prove that 0 is even
-but the second one Even_plus_2, is a *function* that if you pass it a proof that some number n is Even, it will give you back a proof that the number plus two is even
-(S (S n)) is the weird coq way of writing plus 2, it's basically incrementing twice, don't worry about it
-I'm skipping lots of details, you can go learn more
-
-using our even constructors, we can construct a piece of evidence whose *type* is that 4 is even
-at the bottom is a proof that 0 is even, and then we call the plus two constructor twice on top of that
-
-most of the time manually writing out the actual proof object is tedious, so we can use these interactive tactics
-they're basically just metaprograms that construct values of different types
--->
-
----
-
-# Programs == Proofs
-
-<v-click>
-
-```rust
-fn is_one(n: u64) -> bool {
-  n == 1
-}
-```
-
-- `is_one` is a *value* of `u64 -> bool`
-
-</v-click>
-
-<v-click>
-
-| P | Q | P -> Q |
-|---|---|--------|
-| T | T | T      |
-| T | F | F      |
-| F | T | T      |
-| F | F | T      |
-
-- `is_one` is a *proof* of `u64 -> bool`
-
-</v-click>
-
-<!-- <v-click>
-
-```rust
-fn always_true(_: u64) -> bool {
-  n == 1
-}
-```
-
-</v-click> -->
-
-
-<!--
-where this really gets powerful, is *functions* that can transform evidence into different pieces of evidence
-remember our simple rust function is_one
-the type of this function is u64 -> bool
-in programming languages we read that type as the function type, basically an indication that we can take a value of some type and transform it into a value of another type
-using the types as propositions concept again though, we can just use different words and treat the arrow as *logical implication*
-
-again though, u64 -> bool isn't a very interesting type, lots of functions that do different things have that same type
+here's a slightly more interesting example
+again, the purpose of this talk isn't to teach you how to use Coq, it's just to let you know what's possible
+here we're defining our own type, and the way we've defined the type means we can use it to make claims about numbers being Even
+basically we've defined a set of rules, ones that we completely made up, about what it means for a number to be even, and this set of rules can be used to *construct* proofs that some particular number is even
+then we can prove that particular numbers are even, again don't worry about exactly how this is working
+I'm using Coq's interactive tactic system to metaprogrammatically construct an object that proves that 4 is even
 -->
 
 ---
 
 ```v
-Fixpoint double (n:nat) :=
+Fixpoint double (n: nat) :=
   match n with
   | O => O
   | S sub_n => S (S (double sub_n))
@@ -421,7 +270,7 @@ Fixpoint double (n:nat) :=
 <v-click>
 
 ```v
-Theorem even_double: forall n, Even (double n).
+Definition even_double: forall n, Even (double n).
 Proof.
   induction n; constructor; assumption.
 Qed.
@@ -430,35 +279,16 @@ Qed.
 </v-click>
 
 <!--
-with dependent types, especially more interesting ones like Even
-a *function* can be a *logical theorem* that proves something
-if you double any number result is even
-even_double is just a function
+we can prove more interesting things though
+double is a function that doubles a natural number, using recursion
+and we can prove that if you double any natural number, the result is even
+under the hood, even_double is just a function
 it transforms values of a the type natural number into a proof that that doubling that specific natural number is even
 -->
 
 ---
 
-```v
-Definition even_double_manual :=
-  fun n: nat => nat_ind
-  (fun n0: nat => Even (double n0)) Even_0
-  (fun (n0: nat) (IHn: Even (double n0)) =>
-   Even_plus_2
-     ((fix double (n1: nat): nat :=
-        match n1 with
-        | 0 => 0
-        | S sub_n => S (S (double sub_n))
-        end) n0) IHn) n.
-```
-
-<!--
-here's the raw function
--->
-
----
-
-If you want to learn more:
+# If you want to learn more:
 
 - [Software Foundations](https://softwarefoundations.cis.upenn.edu/)
 - [Certified Programming with Dependent Types](http://adam.chlipala.net/cpdt/)
@@ -476,14 +306,23 @@ Dependently typed proof languages are extremely powerful:
 - [HACMS: High Assurance Cyber Military Systems](https://loonwerks.com/projects/hacms.html)
 - [Project Everest](https://project-everest.github.io/)
 
-<v-click>
-
-Why isn't everyone doing this?
-
-</v-click>
 
 <!--
 very powerful
+-->
+
+---
+
+# Why isn't everyone doing this?
+
+<v-clicks>
+
+- Research Debt
+- Pure Functional Dogma
+
+</v-clicks>
+
+<!--
 why aren't these tools widely used?
 two big reasons
 -->
@@ -500,12 +339,11 @@ two big reasons
 
 > The climb isn’t progress: the climb is a mountain of debt.
 
-
 </v-click>
 
 <v-click at="2">
 
-> The insidious thing about research debt is that it’s normal. Everyone takes it for granted, and doesn’t realize that things could be different. For example, it’s normal to give very mediocre explanations of research, and people perceive that to be the ceiling of explanation quality. On the rare occasions that truly excellent explanations come along, people see them as one-off miracles rather than a sign that we could systematically be doing better.
+> The insidious thing about research debt is that it’s normal. Everyone takes it for granted, and doesn’t realize that things could be different.
 
 </v-click>
 
@@ -522,35 +360,39 @@ Academia has bad incentives to properly explain and expose their work.
 </style>
 
 <!--
+research debt is a big problem
+
 read quotes
 culture of academia
 jargon terseness
 toxic, feels intentionally exclusive
+
+but research debt isn't the *main* problem
 -->
 
 ---
 
 # Pure Functional Dogma
 
-Outlawing mutation and side effects gives a model of computation the same cleanliness as pure logic.
+<v-clicks>
 
-<v-click>
+- No mutation or side effects.
+- But it's always a lie!
+- Computers are just big chunks of mutable state.
 
-But it's always a lie!
-
-</v-click>
-
-<v-click>
-
-Von Neumann computation is *defined* as effectful mutation of state.
-
-</v-click>
+</v-clicks>
 
 <!--
-metaprogramming not used when in lisp and scheme, very widely used in Rust
-discriminated union types not used when in ml and haskell, very widely used in Rust
-proof languages are pure functional
-that makes sense for mathematical proofs, but clearly it isn't sufficient
+the real problem has been pure functional dogma
+really quick, what is the pure functional paradigm?
+it's this
+it's a lie!
+real computation is imperative, it mutates state
+
+the real problem is that these systems have never been truly practical!
+practicing engineers trying to build real systems that they can actually ship to accomplish some goal just couldn't use these techniques
+my theory about why that's remained true is because these techniques have unproductively focused almost exclusively on the pure functional paradigm
+in order to make formal verification mainstream, we have to be able to prove things about realistic imperative programs
 need system for mutable state
 -->
 
@@ -562,6 +404,7 @@ Logical framework for reasoning about mutable state.
 
 <!--
 separation logic was invented for this purpose
+I'm surprised how often people who've heard of proof languages haven't heard of separation logic
 but first we have to understand the normal logical systems it's responding to
 -->
 
@@ -571,17 +414,11 @@ but first we have to understand the normal logical systems it's responding to
 
 ```
 P ∧ Q
-// we could write it with an "and" symbol if we want
-P & Q
 ```
 
 <v-click>
 
-(logical "or" operation is called *disjunction* by academics, P ∨ Q)
-
-</v-click>
-
-<v-click>
+<br>
 
 ```
 P ∧ Q
@@ -601,9 +438,9 @@ freely duplicate P
 ---
 
 ```
-Even(4) ∧ (1 + 1 == 2)
+Even(4) ∧ (1 + 1 = 2)
 equivalent to:
-(Even(4) ∧ (1 + 1 == 2)) ∧ Even(4)
+(Even(4) ∧ (1 + 1 = 2)) ∧ Even(4)
 ```
 
 <!--
@@ -613,14 +450,45 @@ pure logical facts
 ---
 
 ```
-mem[a] == 1
+a --> 1
 ```
 
 <v-click>
 
+<br>
+
+memory location `a` points to `1`
+
+</v-click>
+
+---
+
+```rust
+// {a --> 1}
+let a_value = *a;
+// {a --> 1}
+assert(a_value == 1);
+// {a --> 1}
 ```
-???
-(mem[a] == 1) ∧ (mem[a] == 2)
+
+<v-click>
+
+```rust
+// {a --> 1}
+some_function(a);
+// {a --> 1 ∧ a --> ???}
+let a_value = *a;
+assert(a_value == 1); // ❌
+```
+
+</v-click>
+
+<v-click>
+
+<br>
+
+```
+(a --> 1) ∧ (a --> 2)
 ```
 
 </v-click>
@@ -630,25 +498,40 @@ but for resources? can change or be destroyed?
 Rust's ownership system was directly inspired by separation logic.
 easy to create inconsistent situations
 rules don't stop you early enough
+verification researchers were using this kind of approach before separation logic, and it made proofs about program correctness extremely tedious and basically impossible to scale
+you had to make assertions about the state of the *entire* program, rather than being able to make assertions about little pieces of the program and compose them together
 -->
 
 ---
 
 ```
 // Not Allowed! ❌
-(mem[a] == 1) * (mem[a] == 1)
+(a --> 1) * (a --> 1)
 ```
-
-<div class="h-20"></div>
 
 <v-click>
 
+<br>
+
 ```
 // Okay! ✅
-(mem[a] == 1) * (mem[b] == 2)
+(a --> 1) * (b --> 2)
 ```
 
 </v-click>
+
+---
+
+```rust
+// {a --> 1}
+let a_value = *a;
+assert(a_value == 1);
+// {a --> 1}
+some_function(mem);
+// {}
+// let a_value = *a;
+// ❌ no longer own a!
+```
 
 <!--
 back to separation logic
@@ -659,7 +542,8 @@ even when consistent
 assertions are *disjoint*, or separate
 can't duplicate
 have to give away knowledge, or ownership
-other ideas, separating implication, frame rule
+this disjointness requirement is surprisingly powerful, it makes it so it's possible to make assertions about just one little piece of the program, knowing that if another piece of the program gives you knowledge about some piece of state, no one else can mess with that state but you!
+other more complex ideas flow from the disjointness concept, separating implication, frame rule
 
 but what about multiple read only?
 what about concurrency or atomics?
@@ -669,31 +553,30 @@ what about concurrency or atomics?
 
 # Rust
 
-Rust borrow checker a proof checker for a *subset* of separation logic.
+<v-clicks>
 
-(All type checkers are proof checkers, just for very simple logical systems.)
+- Rust borrow checker: proof checker for a *subset* of a fractional separation logic.
+- Need `unsafe` for it to actually be realistic and useful.
+- Can't reason about correctness of `unsafe` code.
 
-Need `unsafe` for it to
+</v-clicks>
 
 <!--
 like I mentioned, the rust ownership and lifetime system, which is checked by the borrow checker, is directly inspired by separation logic
 separation logic
 -->
 
-
 ---
 
-# Iris
-
-Built to verify arbitrarily complex Rust programs.
-
-[Iris from the ground up](https://people.mpi-sws.org/~dreyer/papers/iris-ground-up/paper.pdf)
-
-[RustBelt: Securing the Foundations of the Rust Programming Language](https://plv.mpi-sws.org/rustbelt/popl18/paper.pdf)
+# Iris Separation Logic
 
 <v-clicks>
 
-- Type system, including ownership and lifetimes, `Send` and `Sync`
+- Built to verify arbitrarily complex Rust programs.
+- Written in Coq.
+- [Iris from the ground up](https://people.mpi-sws.org/~dreyer/papers/iris-ground-up/paper.pdf)
+- [RustBelt: Securing the Foundations of the Rust Programming Language](https://plv.mpi-sws.org/rustbelt/popl18/paper.pdf)
+- Type system, ownership and lifetimes, `Send` and `Sync`
 - `Arc`, `Rc`, `Cell`, `RefCell`, `Mutex`, `RwLock`, `mem::swap`, `thread::spawn`, `rayon::join`, `take_mut`
 
 </v-clicks>
@@ -708,17 +591,36 @@ used to verify soundness of Rust type system
 
 ---
 
-Why isn't everyone using Iris?
+# Why isn't everyone using Iris?
 
-- Still lots of research debt.
-- No directly usable tool.
+<v-clicks>
+
+- Research debt.
+- Not a directly usable language.
+- Only built for "on the side" proofs.
+
+</v-clicks>
+
+<br>
+
+<v-click>
+
+```
+funrec option_as_mut(x) ret ret :=
+  let r = new(2) in
+  letcont k() := delete(1, x); jump ret(r) in
+  let y = ∗x in case ∗y of
+  − r :=={inj 0} (); jump k()
+  − r :=={inj 1} y.1; jump k()
+```
+
+</v-click>
 
 <!--
 core ideas are learnable
 mired in academic jargon, obtuse notation
 only used in academic work
 only "on the side proofs"
-(TODO side by side example)
 -->
 
 ---
@@ -771,12 +673,12 @@ Logic Magmide              +-------------> Host Magmide
                       and verifies
 ```
 
-<v-click>
+<v-clicks>
 
-- C -> Rust
-- Coq/LLVM -> Magmide
+- Rust -> C
+- Magmide -> Coq and LLVM
 
-</v-click>
+</v-clicks>
 
 <v-click>
 
@@ -791,6 +693,9 @@ Thank you!
 </v-click>
 
 <style>
+.slidev-layout {
+  @apply pl-[16rem] pr-[10rem] py-[3rem] text-xl;
+}
 .slidev-code, pre {
   @apply text-xs !important;
 }

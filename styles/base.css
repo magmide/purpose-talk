@@ -3,7 +3,11 @@
 }*/
 
 .slidev-layout {
-	@apply px-[12rem] pt-[6rem] pb-[8rem];
+	@apply px-[11rem] pt-[6rem] pb-[8rem] text-2xl;
+}
+
+.slidev-layout h1 + p {
+	opacity: 1 !important;
 }
 
 .slidev-code, pre {

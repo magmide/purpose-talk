@@ -7,11 +7,7 @@
 	},
 	"dependencies": {
 		"@slidev/cli": "^0.28.2",
-		"@slidev/theme-default": "*",
-		"@slidev/theme-seriph": "*"
+		"@slidev/theme-apple-basic": "^0.20.0"
 	},
-	"name": "magmide-talk",
-	"devDependencies": {
-		"slidev-theme-takahashi": "^1.0.0"
-	}
+	"name": "magmide-talk"
 }
