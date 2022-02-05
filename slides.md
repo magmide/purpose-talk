@@ -349,7 +349,8 @@ two big reasons
 
 <v-click at="3">
 
-Academia has bad incentives to properly explain and expose their work.
+Academia has bad incentives to<br>
+properly explain and expose their work.
 
 </v-click>
 
@@ -527,7 +528,7 @@ you had to make assertions about the state of the *entire* program, rather than 
 let a_value = *a;
 assert(a_value == 1);
 // {a --> 1}
-some_function(mem);
+some_function(a);
 // {}
 // let a_value = *a;
 // ❌ no longer own a!
