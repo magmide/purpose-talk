@@ -38,12 +38,12 @@ you don't have to be good at Rust, but understanding how its type system works w
 - operational failures
 - safety critical failures
 
-[The Cost of Poor Software Quality in the US: A 2020 Report](https://www.it-cisq.org/pdf/CPSQ-2020-report.pdf)
+[CISQ: The Cost of Poor Software Quality in the US: A 2020 Report](https://www.it-cisq.org/pdf/CPSQ-2020-report.pdf)
 
 - $1.56 trillion in operational failures
 - $1.31 trillion in technical debt
 
-[The Hidden Costs of Cybercrime](https://www.mcafee.com/enterprise/en-us/assets/reports/rp-hidden-costs-of-cybercrime.pdf)
+[McAfee: The Hidden Costs of Cybercrime](https://www.mcafee.com/enterprise/en-us/assets/reports/rp-hidden-costs-of-cybercrime.pdf)
 
 - $945 billion monetary loss from cybercrime
 - $145 billion global spending on cybersecurity
@@ -176,7 +176,7 @@ a dependent type system is one that allows *types* to reference, or *depend* on 
 
 ---
 
-# Dependent Types
+# Dependent Types (using Coq)
 
 ```v
 Program Definition is_one n: {b | b = true <-> n = 1} :=
@@ -284,6 +284,7 @@ double is a function that doubles a natural number, using recursion
 and we can prove that if you double any natural number, the result is even
 under the hood, even_double is just a function
 it transforms values of a the type natural number into a proof that that doubling that specific natural number is even
+even_double is infinitely better than a unit test
 -->
 
 ---
@@ -462,6 +463,10 @@ memory location `a` points to `1`
 
 </v-click>
 
+<!--
+what about resources?
+-->
+
 ---
 
 ```rust
@@ -495,7 +500,8 @@ assert(a_value == 1); // ❌
 </v-click>
 
 <!--
-but for resources? can change or be destroyed?
+here the comments show what logical assertions or knowledge we have at different steps of the program
+a notation roughly like this is used in different kinds of formal verification
 Rust's ownership system was directly inspired by separation logic.
 easy to create inconsistent situations
 rules don't stop you early enough
@@ -521,6 +527,16 @@ you had to make assertions about the state of the *entire* program, rather than 
 
 </v-click>
 
+<!--
+back to separation logic
+*separating* conjunction
+use star, pronounced "and separately"
+must be disjoint
+even when consistent
+assertions are *disjoint*, or separate
+can't duplicate
+-->
+
 ---
 
 ```rust
@@ -535,13 +551,6 @@ some_function(a);
 ```
 
 <!--
-back to separation logic
-*separating* conjunction
-use star, pronounced "and separately"
-must be disjoint
-even when consistent
-assertions are *disjoint*, or separate
-can't duplicate
 have to give away knowledge, or ownership
 this disjointness requirement is surprisingly powerful, it makes it so it's possible to make assertions about just one little piece of the program, knowing that if another piece of the program gives you knowledge about some piece of state, no one else can mess with that state but you!
 other more complex ideas flow from the disjointness concept, separating implication, frame rule
@@ -556,7 +565,7 @@ what about concurrency or atomics?
 
 <v-clicks>
 
-- Rust borrow checker: proof checker for a *subset* of a fractional separation logic.
+- Rust borrow checker: proof checker for a *decidable subset* of a fractional separation logic.
 - Need `unsafe` for it to actually be realistic and useful.
 - Can't reason about correctness of `unsafe` code.
 
@@ -564,7 +573,8 @@ what about concurrency or atomics?
 
 <!--
 like I mentioned, the rust ownership and lifetime system, which is checked by the borrow checker, is directly inspired by separation logic
-separation logic
+it's impossible to create an algorithm that can *find* a proof of any proposition, so it's impossible to create a type checking algorithm that could figure out if unsafe code wasn't actually unsafe without us giving it an actual proof to check
+the borrow checker is only able to check a closed subset of separation logic without more help
 -->
 
 ---
@@ -579,8 +589,15 @@ separation logic
 - [RustBelt: Securing the Foundations of the Rust Programming Language](https://plv.mpi-sws.org/rustbelt/popl18/paper.pdf)
 - Type system, ownership and lifetimes, `Send` and `Sync`
 - `Arc`, `Rc`, `Cell`, `RefCell`, `Mutex`, `RwLock`, `mem::swap`, `thread::spawn`, `rayon::join`, `take_mut`
+- Can even verify no resource leaks!
 
 </v-clicks>
+
+<style>
+.slidev-layout {
+  @apply py-[3rem]
+}
+</style>
 
 <!--
 basic ideas are just the beginning
@@ -676,8 +693,8 @@ Logic Magmide              +-------------> Host Magmide
 
 <v-clicks>
 
-- Rust -> C
-- Magmide -> Coq and LLVM
+- C -> Rust
+- Coq and LLVM -> Magmide
 
 </v-clicks>
 
