@@ -25,8 +25,7 @@ formal verification, what it is
 what big ideas are
 practical and mainstream
 
-this talk is intended for people who already understand type systems, and understanding the Rust type system is really helpful
-you don't have to be good at Rust, but understanding how its type system works will make this talk way easier to understand
+useful but not necessary to understand type systems, especially rust type system
 -->
 
 ---
@@ -171,7 +170,7 @@ can we be certain?
 testing can't do it, at least not for infinite inputs
 can the type of the function?
 this is where dependent types come in
-a dependent type system is one that allows *types* to reference, or *depend* on *values*
+a dependent type system is one that allows *types* to reference, or *depend* on, *values*
 -->
 
 ---
@@ -432,8 +431,6 @@ equivalent to:
 
 <!--
 conjunction is the academic name for the logical "and" operation.
-conjunction
-*pure* propositions, duplicable
 freely duplicate P
 -->
 
@@ -573,8 +570,11 @@ what about concurrency or atomics?
 
 <!--
 like I mentioned, the rust ownership and lifetime system, which is checked by the borrow checker, is directly inspired by separation logic
-it's impossible to create an algorithm that can *find* a proof of any proposition, so it's impossible to create a type checking algorithm that could figure out if unsafe code wasn't actually unsafe without us giving it an actual proof to check
-the borrow checker is only able to check a closed subset of separation logic without more help
+the Rust borrow checker is a function that, for this *decidable subset* of a separation logic, can in polynomial time check if all the propositions are consistent
+basically because it's a decidable subset, the Rust borrow checker could figure out a proof for you, and always can
+but this is just for a decidable subset. it's possible to *manually* write proofs for more complicated logics, ones where it's impossible for a decidable algorithm to always find an answer.
+in general it's impossible to create an algorithm to always decidably find a proof for any proposition in polynomial time.
+this is why unsafe is needed in Rust, it would be impossible to write the full scope of programs we need to write without being able to escape from the small decidable subset the borrow checker can understand
 -->
 
 ---
@@ -605,6 +605,8 @@ more complex versions for about 20 years
 Iris
 used to verify soundness of Rust type system
 *and even to verify the correctness of code that uses `unsafe`*!
+not using a decidable algorithm, but directly giving proofs
+tactics can help *search* for proofs, but they aren't guaranteed to find them
 -->
 
 ---
@@ -661,9 +663,9 @@ Design constraints:
 <!--
 Can formal verification be practical?
 core ideas
-Rust succeeded by making big promises, give full logical power
+Rust succeeded by making big promises, give full logical power. not just a decidable subset, but a full logic. we can still use decidable algorithms to automate things if we have a full logic, but the opposite isn't true
 a logical system can formalize any environment, we might as well
-trackable effects use an idea from Iris/Iron, trackable invariants
+trackable effects use an idea from Iris/Iron, trackable invariants. give perfect knowledge of safety rather than requiring perfect safety
 languages can create reusable safety guarantees for sub-languages, reexpose proof language, combine upward
 rust and cargo are great
 prioritize distillation research, no obtuse notations, no jargon, no non-ascii characters, examples before formal definitions
