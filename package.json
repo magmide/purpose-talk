@@ -3,11 +3,14 @@
 	"scripts": {
 		"build": "slidev build",
 		"dev": "slidev --open",
-		"export": "slidev export"
+		"export": "slidev export --with-clicks"
 	},
 	"dependencies": {
 		"@slidev/cli": "^0.28.2",
 		"@slidev/theme-apple-basic": "^0.20.0"
 	},
-	"name": "magmide-talk"
+	"name": "magmide-talk",
+	"devDependencies": {
+		"playwright-chromium": "^1.18.1"
+	}
 }

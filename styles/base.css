@@ -1,7 +1,3 @@
-/*html {
-	font-size: 40px;
-}*/
-
 .slidev-layout {
 	@apply px-[11rem] pt-[6rem] pb-[8rem] text-2xl;
 }
