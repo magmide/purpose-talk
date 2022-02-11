@@ -1,3 +1,4 @@
 node_modules/
 *.local.*
 slides-export.pdf
+slides-export/
