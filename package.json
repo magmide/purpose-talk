@@ -1,4 +1,5 @@
 {
+	"name": "magmide-talk",
 	"private": true,
 	"scripts": {
 		"build": "slidev build",
@@ -9,7 +10,6 @@
 		"@slidev/cli": "^0.28.2",
 		"@slidev/theme-apple-basic": "^0.20.0"
 	},
-	"name": "magmide-talk",
 	"devDependencies": {
 		"playwright-chromium": "^1.18.1"
 	}
