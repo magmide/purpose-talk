@@ -635,6 +635,7 @@ some_function(a);
 
 - Research debt.
 - Not a directly usable language.
+- Not built into any other tools.
 - Only built for "on the side" proofs.
 
 </v-clicks>
@@ -660,7 +661,7 @@ funrec option_as_mut(x) ret ret :=
 
 Necessities to achieve goal:
 
-- Fully verifiable
+- Capable of arbitrary logic
 - Capable of bare metal performance
 - Gradually verifiable
 - Fully reusable
@@ -669,7 +670,7 @@ Necessities to achieve goal:
 
 ---
 
-# Fully verifiable
+# Capable of arbitrary logic
 
 - Max out logical power with full type theory.
 - Able to formalize any assertion.
