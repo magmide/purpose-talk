@@ -87,9 +87,13 @@ drawings:
 
 # It doesn't have to be this way!
 
+<v-clicks>
+
 - Software is just information that represents pure logic.
 - Relies on hardware assumptions, but can itself be literally mathematically perfect.
 - Provably correct code is possible with formal verification.
+
+</v-clicks>
 
 ---
 
@@ -105,7 +109,7 @@ drawings:
 - Quadcopter control software.
 - Red team of world-class hackers.
 - Logical proof of security.
-- Tools are purpose-built, not very usable elsewhere.
+- Tools purpose-built by and for academics.
 
 </v-clicks>
 
@@ -255,7 +259,7 @@ Solve All Obligations with (simpl; lia).
 
 - The *type system* checks that everything is consistent.
 - All type systems represent some logic.
-- Checking type safety like finding a proof.
+- Type checkers basically find proofs.
 
 </v-clicks>
 
@@ -301,17 +305,17 @@ Inductive Even: nat -> Prop :=
 ```
 
 ```v
-Definition four_is_even: Even 4.
-Proof.
-  repeat constructor.
-Qed.
+Definition four_is_even: Even 4 :=
+  (Even_plus_2 2 (Even_plus_2 0 Even_0)).
 ```
 
 <v-click>
 
 ```v
-Definition four_is_even_manual: Even 4 :=
-  (Even_plus_2 2 (Even_plus_2 0 Even_0)).
+Definition four_is_even: Even 4.
+Proof.
+  repeat constructor.
+Qed.
 ```
 
 </v-click>
@@ -385,7 +389,7 @@ Dependently typed proof languages are extremely powerful:
 
 > There's a tradeoff between the energy put into explaining an idea, and the energy needed to understand it. On one extreme, the explainer can painstakingly craft a beautiful explanation, leading their audience to understanding without even realizing it could have been difficult. On the other extreme, the explainer can do the absolute minimum and abandon their audience to struggle. This energy is called interpretive labor.
 
-<v-click at="1">
+<v-click>
 
 > People expect the climb to be hard. It reflects the tremendous progress and cumulative effort that's gone into mathematics. The climb is seen as an intellectual pilgrimage, the labor a rite of passage. But the climb could be massively easier. It's entirely possible to build paths and staircases into these mountains. The climb isn't something to be proud of.
 
@@ -393,13 +397,13 @@ Dependently typed proof languages are extremely powerful:
 
 </v-click>
 
-<v-click at="2">
+<v-click>
 
 > The insidious thing about research debt is that it's normal. Everyone takes it for granted, and doesn't realize that things could be different.
 
 </v-click>
 
-<v-click at="3">
+<v-click>
 
 Academia has bad incentives to<br>
 properly explain and expose their work.
@@ -430,6 +434,7 @@ properly explain and expose their work.
 # Separation Logic
 
 - Logical framework for reasoning about mutable state.
+- Can be defined and used within a pure logic like Coq.
 - Surprisingly uncommon.
 
 ---
@@ -672,20 +677,32 @@ Necessities to achieve goal:
 
 # Capable of arbitrary logic
 
+<v-clicks>
+
 - Max out logical power with full type theory.
 - Able to formalize any assertion.
 - Decidable subsets still possible.
-- Don't always have to use full power.
+
+</v-clicks>
+
 
 ---
 
 # Capable of bare metal performance
 
-- Max out computational power, use Iris.
-- LLVM-like abstract assembly language, hardware axioms at bottom.
+<v-clicks>
+
+- Start at the lowest level, use Iris.
 - Less performant abstractions still possible.
+- LLVM-like abstract assembly language, hardware axioms at bottom.
+
+</v-clicks>
+
+<v-click>
 
 <img class="pt-1 h-[36vh] mx-auto" src="https://camo.githubusercontent.com/4d0e55295556938fca5efa11c4f57d902f2c615d82c0ff90071e761f8872cd67/68747470733a2f2f692e737461636b2e696d6775722e636f6d2f39784744652e706e67" />
+
+</v-click>
 
 <style>
 .slidev-layout {
@@ -697,39 +714,55 @@ Necessities to achieve goal:
 
 # Gradually verifiable
 
-- Trackable effects.
+<v-clicks>
+
+- Trackable effects, for tracking safety and correctness conditions.
 - Knowledge of program safety is absolute but flexible.
 - Incremental adoption and realistic iteration.
 - Converge toward correctness.
+
+</v-clicks>
 
 ---
 
 # Fully reusable
 
+<v-clicks>
+
 - Verification pyramid.
 - Foundations pass on provably safe abstractions.
 - Metaprogramming and query-based compiler.
-- Higher level languages can "lift" full power, have escape hatches, use Magmide functions.
+- Higher level languages can "lift" full power, have escape hatches, reuse Magmide compiler functions.
 - Don't have to write proofs for everything.
+
+</v-clicks>
 
 ---
 
 # Practical and usable
 
+<v-clicks>
+
 - Rust/Cargo prove we can have nice things.
 - Remove incidental complexity, focus essential complexity.
+
+</v-clicks>
 
 ---
 
 # Taught effectively
 
+<v-clicks>
+
+- This research needs to be applied.
 - Respect user's time.
-- Formal verification is learnable.
 - Assume reader is trying to get something done.
 - Concrete examples before formal definitions.
 - Call out true prerequisites.
 - Use graspable words not opaque and unsearchable non-ascii symbols.
 - Syntax should make it easy to find definitions.
+
+</v-clicks>
 
 ---
 
@@ -773,7 +806,7 @@ Logic Magmide              +-------------> Host Magmide
 
 ---
 
-# What's possible?
+## Widespread formal verification could bring us...
 
 <v-clicks>
 
@@ -787,7 +820,7 @@ Logic Magmide              +-------------> Host Magmide
 
 ---
 
-# Thank you!
+# This is achievable!
 
 <br>
 
@@ -800,7 +833,8 @@ Logic Magmide              +-------------> Host Magmide
 <v-click>
 
 <br>
+<br>
 
-# Software doesn't have to be so broken!
+# Thank you!
 
 </v-click>
