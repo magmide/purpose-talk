@@ -7,16 +7,25 @@ drawings:
   persist: false
 ---
 
-<h1>Software can literally<br>be perfect</h1>
+<h1>provably<br>correct<br>software</h1>
+<h2>is possible and necessary</h2>
 
-<h2>How Formal Verification and Magmide<br>could make provably correct code<br>tractable for practicing software engineers.</h2>
+<h4>how formal verification and Magmide could make<br>provably correct code tractable for practicing engineers</h4>
 
 <style>
 .slidev-layout {
-  @apply px-[4rem] py-[8rem];
+  @apply px-[7rem] pt-[1rem] text-left;
 }
 .slidev-layout h1 {
-  @apply text-5xl mb-[4rem];
+  @apply mb-[1rem];
+  font-size: 7rem;
+  line-height: 1;
+}
+.slidev-layout h2 {
+  @apply text-6xl mb-[2rem] font-light;
+}
+.slidev-layout h4 {
+  @apply text-3xl;
 }
 </style>
 
